@@ -18,11 +18,12 @@ export const animalRouter = createTRPCRouter({
       console.log("error", error);
     }
   }),
-  postMessage: protectedProcedure
+  addAnimal: protectedProcedure
     .input(
       z.object({
         name: z.string(),
         type: z.string(),
+        description: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -31,6 +32,7 @@ export const animalRouter = createTRPCRouter({
           data: {
             name: input.name,
             type: input.type,
+            description: input.description,
           },
         });
       } catch (error) {
