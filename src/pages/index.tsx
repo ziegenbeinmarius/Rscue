@@ -65,7 +65,14 @@ const AuthShowcase: React.FC = () => {
 
 interface AnimalEntriesProps {}
 const AnimalEntries: React.FC<AnimalEntriesProps> = () => {
+  const { data: sessionData } = useSession();
   const { data: animals, isLoading } = api.animal.getAll.useQuery();
+  const utils = api.useContext();
+  const deleteAnimal = api.animal.deleteAnimal.useMutation({
+    onSettled: async () => {
+      await utils.animal.getAll.invalidate();
+    },
+  });
 
   if (isLoading) return <div>Fetching animals...</div>;
   return (
@@ -77,6 +84,23 @@ const AnimalEntries: React.FC<AnimalEntriesProps> = () => {
             className="rounded-md bg-white p-4"
             key={animal.type + "-" + animal.name}
           >
+            {sessionData && (
+              <a
+                className="relative top-0 right-0 h-16 w-16 cursor-pointer bg-red-500"
+                onClick={() =>
+                  deleteAnimal.mutate(animal.id, {
+                    onSuccess: (res) => {
+                      toast.success("Successfully removed animal");
+
+                      // api.animal.getAll.useQuery().
+                      // api.animal.getAll.useQuery().refetch();
+                    },
+                  })
+                }
+              >
+                X
+              </a>
+            )}
             <h3 className="text-center text-xl font-semibold">{animal.name}</h3>
             <p>Type: {animal.type}</p>
             <p>Description: {animal.description}</p>
@@ -99,16 +123,16 @@ const AnimalForm: React.FC<AnimalFormProps> = () => {
   const utils = api.useContext();
   const { data: session, status } = useSession();
   const addAnimal = api.animal.addAnimal.useMutation({
-    onMutate: async (newAnimal) => {
-      await utils.animal.getAll.cancel();
-      utils.animal.getAll.setData(undefined, (prevAnimals) => {
-        if (prevAnimals) {
-          return [newAnimal, ...prevAnimals];
-        } else {
-          return [newAnimal];
-        }
-      });
-    },
+    // onMutate: async (newAnimal) => {
+    //   await utils.animal.getAll.cancel();
+    //   utils.animal.getAll.setData(undefined, (prevAnimals) => {
+    //     if (prevAnimals) {
+    //       return [newAnimal, ...prevAnimals];
+    //     } else {
+    //       return [newAnimal];
+    //     }
+    //   });
+    // },
     onSettled: async () => {
       await utils.animal.getAll.invalidate();
     },
@@ -134,7 +158,7 @@ const AnimalForm: React.FC<AnimalFormProps> = () => {
         onSuccess: (res) => {
           toast.success("Successfully added animal");
           reset();
-          api.useContext().invalidate();
+          // api.useContext().invalidate();
           // api.animal.getAll.useQuery().
           // api.animal.getAll.useQuery().refetch();
         },

@@ -6,6 +6,7 @@ export const animalRouter = createTRPCRouter({
     try {
       return await ctx.prisma.animal.findMany({
         select: {
+          id: true,
           name: true,
           type: true,
           description: true,
@@ -33,6 +34,19 @@ export const animalRouter = createTRPCRouter({
             name: input.name,
             type: input.type,
             description: input.description,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+  deleteAnimal: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.animal.delete({
+          where: {
+            id: input,
           },
         });
       } catch (error) {
