@@ -23,6 +23,7 @@ export default function Home() {
       <main className=" flex min-h-screen flex-col items-center justify-center">
         <Button onClick={toastBoi}>Hello</Button>
         <p className="text-2xl ">Some text</p>
+        <p className="text-2xl ">More text</p>
         <p className="text-2xl ">
           {hello.data ? hello.data.greeting : "Loading tRPC query..."}
         </p>
