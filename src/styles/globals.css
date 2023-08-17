@@ -74,3 +74,28 @@
     @apply dark bg-background text-foreground;
   }
 }
+
+h1 {
+  @apply text-4xl sm:text-7xl;
+  @apply font-bold;
+}
+h2 {
+  @apply text-3xl sm:text-5xl;
+  @apply font-semibold;
+}
+
+h3 {
+  @apply text-2xl sm:text-3xl;
+  @apply font-semibold;
+}
+h4 {
+  @apply text-xl sm:text-2xl;
+  @apply font-medium;
+}
+h5 {
+  @apply text-xl;
+  @apply font-medium;
+}
+p {
+  @apply text-lg;
+}
