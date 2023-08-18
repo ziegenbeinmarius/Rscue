@@ -17,7 +17,7 @@ model Animal {
     updatedAt   DateTime @updatedAt
     type        String
     name        String   @db.VarChar(255)
-    image       String?
+    image       String
     description String?  @db.VarChar(1023)
 }
 

@@ -19,7 +19,7 @@ export const animalsRouter = createTRPCRouter({
           z.literal("Dog"),
           z.literal("Monkey"),
         ]),
-        image: z.string().optional(),
+        image: z.string().url().optional(),
         description: z.string().max(1023),
       })
     )

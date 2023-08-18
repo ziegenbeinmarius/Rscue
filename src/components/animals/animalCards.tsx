@@ -10,6 +10,7 @@ import {
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface AnimalCardsProps {
   fuck?: string;
@@ -71,7 +72,19 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
                 </CardTitle>
                 <CardDescription>{animal.type}</CardDescription>
               </CardHeader>
-              <CardContent>{animal.description}</CardContent>
+              <CardContent>
+                {animal.image && (
+                  <div className="relative h-48 w-full ">
+                    <Image
+                      alt={`Image of ${animal.name}`}
+                      src={animal.image}
+                      layout="fill"
+                      objectFit="cover"
+                    ></Image>
+                  </div>
+                )}
+                <p>{animal.description}</p>
+              </CardContent>
             </Card>
           );
         })}
