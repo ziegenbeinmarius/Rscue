@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
+import { api } from "@/utils/api";
 
 interface AnimalWizardProps {}
 const animalFormSchema = z.object({
@@ -32,6 +33,9 @@ const animalFormSchema = z.object({
 });
 export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
   const { data: sessionData } = useSession();
+  const { mutate } = api.animals.add.useMutation();
+
+  const ctx = api.useContext();
   const form = useForm<z.infer<typeof animalFormSchema>>({
     resolver: zodResolver(animalFormSchema),
     defaultValues: {
@@ -44,7 +48,11 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
   }
 
   function onSubmit(values: z.infer<typeof animalFormSchema>) {
-    console.log(values);
+    mutate(values, {
+      onSuccess: (res) => {
+        ctx.animals.invalidate();
+      },
+    });
   }
 
   return (
@@ -83,9 +91,9 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
                   </FormControl>
 
                   <SelectContent>
-                    <SelectItem value="cat">Cat</SelectItem>
-                    <SelectItem value="dog">Dog</SelectItem>
-                    <SelectItem value="monkey">Monkey</SelectItem>
+                    <SelectItem value="Cat">Cat</SelectItem>
+                    <SelectItem value="Dog">Dog</SelectItem>
+                    <SelectItem value="Monkey">Monkey</SelectItem>
                   </SelectContent>
                 </Select>
 
