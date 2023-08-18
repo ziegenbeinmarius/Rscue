@@ -30,9 +30,8 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="w-full px-32 py-4">
+                  <div className="w-full  p-4">
                     <NavigationMenuLink>Link</NavigationMenuLink>
                   </div>
                 </NavigationMenuContent>
@@ -46,7 +45,7 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
                   )}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="px-32 py-4">
+                  <div className="p-4">
                     <Button
                       className=""
                       onClick={

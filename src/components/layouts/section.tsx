@@ -1,9 +1,18 @@
+import { cn } from "@/utils";
 import React from "react";
 
-interface SectionProps {
+interface SectionProps extends React.HTMLProps<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export const Section: React.FC<SectionProps> = ({ children }) => {
-  return <div className="py-8 sm:py-16">{children}</div>;
+export const Section: React.FC<SectionProps> = ({
+  children,
+  className,
+  ...props
+}) => {
+  return (
+    <div {...props} className={cn("py-8 sm:py-16", className)}>
+      {children}
+    </div>
+  );
 };

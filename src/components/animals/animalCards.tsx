@@ -15,17 +15,17 @@ interface AnimalCardsProps {
 export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   const { data: animals, isLoading } = api.animals.getAll.useQuery();
 
-  if (!animals) {
-    return (
-      <div>
-        <h2>No Animals</h2>
-      </div>
-    );
-  }
   if (isLoading) {
     return (
       <div>
         <h2>Loading animals</h2>
+      </div>
+    );
+  }
+  if (!animals) {
+    return (
+      <div>
+        <h2>No Animals</h2>
       </div>
     );
   }
