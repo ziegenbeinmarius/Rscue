@@ -33,7 +33,7 @@ const animalFormSchema = z.object({
 });
 export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
   const { data: sessionData } = useSession();
-  const { mutate } = api.animals.add.useMutation();
+  const { mutate: mutateAddAnimal } = api.animals.add.useMutation();
 
   const ctx = api.useContext();
   const form = useForm<z.infer<typeof animalFormSchema>>({
@@ -48,7 +48,7 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
   }
 
   function onSubmit(values: z.infer<typeof animalFormSchema>) {
-    mutate(values, {
+    mutateAddAnimal(values, {
       onSuccess: (res) => {
         ctx.animals.invalidate();
       },

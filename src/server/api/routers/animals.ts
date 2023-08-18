@@ -34,4 +34,9 @@ export const animalsRouter = createTRPCRouter({
       });
       return animal;
     }),
+  delete: protectedProcedure
+    .input(z.object({ animalId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.animal.delete({ where: { id: input.animalId } });
+    }),
 });
