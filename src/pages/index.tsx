@@ -1,6 +1,7 @@
 import { RootLayout } from "@/components/layouts/root";
 import { Section } from "@/components/layouts/section";
 import { AnimalCards } from "@/components/animals/animalCards";
+import { AnimalWizard } from "@/components/animals/animalWizard";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Section>
         <AnimalCards />
       </Section>
+      <AnimalWizard />
     </RootLayout>
   );
 }
