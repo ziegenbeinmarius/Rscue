@@ -28,7 +28,7 @@ interface AnimalWizardProps {}
 const animalFormSchema = z.object({
   name: z.string().min(2).max(50),
   type: z.union([z.literal("Cat"), z.literal("Dog"), z.literal("Monkey")]),
-  image: z.string().optional(),
+  image: z.string(),
   description: z.string().max(1023),
 });
 export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
@@ -49,7 +49,7 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
 
   function onSubmit(values: z.infer<typeof animalFormSchema>) {
     mutateAddAnimal(values, {
-      onSuccess: (res) => {
+      onSuccess: () => {
         ctx.animals.invalidate();
       },
     });
@@ -59,7 +59,7 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
     <Section className="flex flex-col gap-8">
       <h2>Add an animal</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={void form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="name"

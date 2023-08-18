@@ -12,9 +12,7 @@ import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-interface AnimalCardsProps {
-  fuck?: string;
-}
+interface AnimalCardsProps {}
 
 export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   const { data: sessionData } = useSession();
@@ -26,7 +24,7 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
     mutateDeleteAnimal(
       { animalId },
       {
-        onSuccess: (res) => {
+        onSuccess: () => {
           ctx.animals.invalidate();
         },
       }
