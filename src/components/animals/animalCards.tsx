@@ -7,13 +7,30 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface AnimalCardsProps {
   fuck?: string;
 }
 
 export const AnimalCards: React.FC<AnimalCardsProps> = () => {
+  const { data: sessionData } = useSession();
   const { data: animals, isLoading } = api.animals.getAll.useQuery();
+  const { mutate: mutateDeleteAnimal } = api.animals.delete.useMutation();
+  const ctx = api.useContext();
+
+  function deleteAnimal(animalId: string) {
+    mutateDeleteAnimal(
+      { animalId },
+      {
+        onSuccess: (res) => {
+          ctx.animals.invalidate();
+        },
+      }
+    );
+  }
 
   if (isLoading) {
     return (
@@ -38,7 +55,20 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
           return (
             <Card key={animal.id}>
               <CardHeader>
-                <CardTitle>{animal.name}</CardTitle>
+                <CardTitle>
+                  <div className="flex flex-row items-center justify-between">
+                    <p>{animal.name}</p>
+                    {sessionData && (
+                      <Button
+                        variant={"destructive"}
+                        size={"icon_small"}
+                        onClick={() => deleteAnimal(animal.id)}
+                      >
+                        <X size={20} />
+                      </Button>
+                    )}
+                  </div>
+                </CardTitle>
                 <CardDescription>{animal.type}</CardDescription>
               </CardHeader>
               <CardContent>{animal.description}</CardContent>
