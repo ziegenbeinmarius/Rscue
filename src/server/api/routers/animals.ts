@@ -7,7 +7,9 @@ import { z } from "zod";
 
 export const animalsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.animal.findMany();
+    return ctx.prisma.animal.findMany({
+      include: { imageUrls: true, favorites: true },
+    });
   }),
 
   add: protectedProcedure
@@ -19,16 +21,36 @@ export const animalsRouter = createTRPCRouter({
           z.literal("Dog"),
           z.literal("Monkey"),
         ]),
-        image: z.string().url(),
+        location: z.string(),
+        sex: z.string(),
+        age: z.string(),
+        size: z.string(),
+        characteristics: z.string(),
+        health: z.string(),
+        color: z.string(),
+        race: z.string(),
+        imageUrls: z.string().url().array(),
         description: z.string().max(1023),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // console.log(input.imageUrls);
+
       const animal = await ctx.prisma.animal.create({
         data: {
           name: input.name,
           type: input.type,
-          image: input.image,
+          location: input.location,
+          sex: input.sex,
+          age: parseInt(input.age),
+          size: input.size,
+          characteristics: input.characteristics,
+          health: input.health,
+          color: input.color,
+          race: input.race,
+          imageUrls: {
+            create: input.imageUrls.map((url) => ({ url })),
+          },
           description: input.description,
         },
       });
