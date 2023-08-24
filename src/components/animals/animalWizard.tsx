@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +34,7 @@ const animalFormSchema = z.object({
   health: z.string(),
   color: z.string(),
   race: z.string(),
-  // imageUrls: z.string().url().array(),
+  imageUrls: z.string().url().array(),
   description: z.string().max(1023),
 });
 
@@ -45,6 +45,9 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
   const { mutate: mutateAddAnimal } = api.animals.add.useMutation();
 
   const ctx = api.useContext();
+
+  const [indexes, setIndexes] = useState<number[]>([]);
+  const [counter, setCounter] = useState<number>(0);
   const form = useForm<z.infer<typeof animalFormSchema>>({
     resolver: zodResolver(animalFormSchema),
   });
@@ -57,12 +60,8 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
     console.log(values);
 
     mutateAddAnimal(
-      {
-        ...values,
-        imageUrls: [
-          "https://images.pexels.com/photos/2853130/pexels-photo-2853130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ],
-      },
+      values,
+
       {
         onSuccess: () => {
           ctx.animals.invalidate();
@@ -233,6 +232,46 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
               </FormItem>
             )}
           />
+          {indexes.map((existingIndex, index) => {
+            return (
+              <div className="flex flex-row items-end gap-4">
+                <FormField
+                  key={`${existingIndex}_${index}`}
+                  control={form.control}
+                  name={`imageUrls.${index}`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Animal url</FormLabel>
+                      <FormControl>
+                        <Input placeholder="www.cute.se" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setIndexes((prev) =>
+                      prev.filter((savedIndex) => savedIndex !== existingIndex)
+                    );
+                  }}
+                >
+                  remove img
+                </Button>
+              </div>
+            );
+          })}
+          <Button
+            type="button"
+            onClick={() => {
+              setIndexes((prev) => [...prev, counter]);
+              setCounter((prev) => prev + 1);
+            }}
+          >
+            Add img
+          </Button>
 
           <FormField
             control={form.control}
