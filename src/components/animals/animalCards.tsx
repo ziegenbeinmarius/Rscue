@@ -68,20 +68,34 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
                     )}
                   </div>
                 </CardTitle>
-                <CardDescription>{animal.type}</CardDescription>
+                <CardDescription>
+                  {animal.type}, {animal.location}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                {animal.image && (
-                  <div className="relative h-48 w-full ">
-                    <Image
-                      alt={`Image of ${animal.name}`}
-                      src={animal.image}
-                      layout="fill"
-                      objectFit="cover"
-                    ></Image>
-                  </div>
-                )}
+                {animal.imageUrls &&
+                  animal.imageUrls.length > 0 &&
+                  animal.imageUrls.map((imageUrl, index) => (
+                    <div
+                      className="relative h-48 w-full"
+                      key={`img_${animal.name}_${animal.id}_${index}`}
+                    >
+                      <Image
+                        alt={`Image of ${animal.name}_${index}`}
+                        src={imageUrl.url}
+                        layout="fill"
+                        objectFit="cover"
+                      ></Image>
+                    </div>
+                  ))}
                 <p>{animal.description}</p>
+                <p>Age: {animal.age}</p>
+                <p>Character: {animal.characteristics}</p>
+                <p>Color: {animal.color}</p>
+                <p>Health: {animal.health}</p>
+                <p>Race: {animal.race}</p>
+                <p>Sex: {animal.sex}</p>
+                <p>Size: {animal.size}</p>
               </CardContent>
             </Card>
           );
