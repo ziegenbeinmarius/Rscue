@@ -234,7 +234,10 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
           />
           {indexes.map((existingIndex, index) => {
             return (
-              <div className="flex flex-row items-end gap-4">
+              <div
+                className="flex flex-row items-end gap-4"
+                key={existingIndex}
+              >
                 <FormField
                   key={`${existingIndex}_${index}`}
                   control={form.control}
