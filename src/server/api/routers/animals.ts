@@ -11,6 +11,11 @@ export const animalsRouter = createTRPCRouter({
       include: { imageUrls: true, favorites: true },
     });
   }),
+  findOne: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.animal.findFirst({
+      include: { imageUrls: true, favorites: true },
+    });
+  }),
 
   add: protectedProcedure
     .input(

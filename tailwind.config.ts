@@ -2,6 +2,7 @@ import { type Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: [
+    "./node_modules/flowbite-react/**/*.js",
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
