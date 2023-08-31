@@ -93,7 +93,9 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
                 <Button
                   variant={"destructive"}
                   size={"icon_small"}
-                  onClick={() => deleteAnimal(animal.id)}
+                  onClick={(e) => {
+                    e.preventDefault(), deleteAnimal(animal.id);
+                  }}
                 >
                   <X size={20} />
                 </Button>
@@ -106,23 +108,20 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Carousel draggable={false} leftControl={<></>} rightControl={<></>}>
-            {animal.imageUrls &&
-              animal.imageUrls.length > 0 &&
-              animal.imageUrls.map((imageUrl, index) => (
-                <div
-                  className="relative h-48 w-full"
-                  key={`img_${animal.name}_${animal.id}_${index}`}
-                >
-                  <Image
-                    alt={`Image of ${animal.name}_${index}`}
-                    src={imageUrl.url}
-                    layout="fill"
-                    objectFit="contain"
-                  ></Image>
-                </div>
-              ))}
-          </Carousel>
+          {animal.imageUrls && animal.imageUrls.length > 0 && (
+            <div
+              className="relative h-48 w-full"
+              key={`img_${animal.name}_${animal.id}`}
+            >
+              <Image
+                className="object-contain"
+                fill
+                sizes="(max-width: 200px)"
+                alt={`Image of ${animal.name}`}
+                src={animal.imageUrls[0]!.url}
+              ></Image>
+            </div>
+          )}
         </CardContent>
       </Card>
       <AnimalDialog
@@ -163,10 +162,11 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
                 key={`img_${animal.name}_${animal.id}_${index}`}
               >
                 <Image
+                  className="object-contain"
+                  fill
+                  sizes="(max-width: 672px )"
                   alt={`Image of ${animal.name}_${index}`}
                   src={imageUrl.url}
-                  layout="fill"
-                  objectFit="contain"
                 ></Image>
               </div>
             ))}
