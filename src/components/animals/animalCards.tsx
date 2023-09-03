@@ -12,29 +12,17 @@ import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Carousel } from "flowbite-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Loader } from "../ui/loader";
 
 interface AnimalCardsProps {}
 
 type AnimalOutput = RouterOutputs["animals"]["findOne"];
 export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   const { data: animals, isLoading } = api.animals.getAll.useQuery();
-  const ctx = api.useContext();
 
   if (isLoading) {
-    return (
-      <div>
-        <h2>Loading animals</h2>
-      </div>
-    );
+    return <Loader isLoading={isLoading} />;
   }
   if (!animals) {
     return (
@@ -146,6 +134,7 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
   if (!animal) {
     return <></>;
   }
+  // TODO make card clickable but dont open dialog on remove animal
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogContent className="max-w-2xl">
