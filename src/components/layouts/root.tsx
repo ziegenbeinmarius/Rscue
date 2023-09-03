@@ -54,7 +54,7 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <nav
           className={cn(
             "sticky top-0 z-[99] p-4 transition-all duration-300",
-            atTop ? " sm:px-8 sm:py-4" : "bg-secondary  sm:px-8 sm:py-4"
+            atTop ? " " : "bg-secondary "
           )}
         >
           <div className="m-auto flex max-w-screen-2xl flex-row items-center justify-between ">
