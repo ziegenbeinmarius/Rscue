@@ -14,6 +14,7 @@ import Image from "next/image";
 import { Carousel } from "flowbite-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Loader } from "../ui/loader";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface AnimalCardsProps {}
 
@@ -164,45 +165,47 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
           <DialogTitle>{animal.name}</DialogTitle>
         </DialogHeader>
 
-        <Carousel
-          leftControl={
-            <div className="rounded-full bg-primary p-2">
-              <ChevronLeft className="text-white" />
-            </div>
-          }
-          rightControl={
-            <div className="rounded-full bg-primary p-2">
-              <ChevronRight className="text-white" />
-            </div>
-          }
-        >
-          {animal.imageUrls &&
-            animal.imageUrls.length > 0 &&
-            animal.imageUrls.map((imageUrl, index) => (
-              <div
-                className="relative h-96 w-full"
-                key={`img_${animal.name}_${animal.id}_${index}`}
-              >
-                <Image
-                  className="object-contain"
-                  fill
-                  sizes="(max-width: 672px )"
-                  alt={`Image of ${animal.name}_${index}`}
-                  src={imageUrl.url}
-                ></Image>
+        <ScrollArea className="h-[70vh] pr-4">
+          <Carousel
+            leftControl={
+              <div className="rounded-full bg-primary p-2">
+                <ChevronLeft className="text-white" />
               </div>
-            ))}
-        </Carousel>
+            }
+            rightControl={
+              <div className="rounded-full bg-primary p-2">
+                <ChevronRight className="text-white" />
+              </div>
+            }
+          >
+            {animal.imageUrls &&
+              animal.imageUrls.length > 0 &&
+              animal.imageUrls.map((imageUrl, index) => (
+                <div
+                  className="relative h-96 max-h-[30vh] w-full"
+                  key={`img_${animal.name}_${animal.id}_${index}`}
+                >
+                  <Image
+                    className="object-contain"
+                    fill
+                    sizes="(max-width: 672px )"
+                    alt={`Image of ${animal.name}_${index}`}
+                    src={imageUrl.url}
+                  ></Image>
+                </div>
+              ))}
+          </Carousel>
 
-        <p>{animal.description}</p>
-        <p>Age: {animal.age} years old</p>
-        <p>Sex: {animal.sex}</p>
-        <p>Size: {animal.size}</p>
-        <p>Character: {animal.characteristics}</p>
-        <p>Color: {animal.color}</p>
-        <p>Health: {animal.health}</p>
-        <p>Race: {animal.race}</p>
-        <p>Sex: {animal.sex}</p>
+          <p>{animal.description}</p>
+          <p>Age: {animal.age} years old</p>
+          <p>Sex: {animal.sex}</p>
+          <p>Size: {animal.size}</p>
+          <p>Character: {animal.characteristics}</p>
+          <p>Color: {animal.color}</p>
+          <p>Health: {animal.health}</p>
+          <p>Race: {animal.race}</p>
+          <p>Sex: {animal.sex}</p>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

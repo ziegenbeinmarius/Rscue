@@ -50,7 +50,7 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       <main className={cn(raleway.className)}>
         <nav
           className={cn(
-            "sticky top-0 z-[99]  p-4 shadow transition-all duration-300",
+            "sticky top-0 z-40  p-4 shadow transition-all duration-300",
             atTop ? " " : "rounded-b-md bg-secondary "
           )}
         >
