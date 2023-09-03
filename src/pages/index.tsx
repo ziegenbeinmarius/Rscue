@@ -23,56 +23,56 @@ export default function Home() {
 interface FullscreenLandingProps {}
 const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
   return (
-    <div>
+    <section className="relative px-4">
       {/* <div className="absolute left-0 top-0 -z-10  h-screen w-full  "></div> */}
-      <div className="relative">
-        <div className="m-auto flex max-w-screen-2xl flex-col justify-between gap-8 px-4 py-32 sm:px-8 ">
-          <div className="flex flex-1 flex-col md:flex-row ">
-            <div className="flex flex-1 flex-col space-y-16">
-              <h1>
-                Find your new <br className="hidden sm:block" />
-                pet partner
-              </h1>
-              <div>
-                <Button className="font-bold" size={"cta"}>
-                  Look at our animals
-                </Button>
+      <div className="m-auto flex max-w-screen-2xl flex-col justify-between gap-8  py-32  ">
+        <div className="flex flex-1 flex-col md:flex-row ">
+          <div className="flex flex-1 flex-col space-y-16">
+            <h1>
+              Find your new <br className="hidden sm:block" />
+              pet partner
+            </h1>
+            <div>
+              <Button className="font-bold" size={"cta"}>
+                Look at our animals
+              </Button>
+            </div>
+          </div>
+          <aside className="relative flex flex-col gap-16 md:w-1/2">
+            <div className="relative flex flex-row justify-between gap-8">
+              <div className=" relative h-72 w-[50rem]">
+                <Image
+                  className="w-full rounded-3xl"
+                  alt="Dog"
+                  src={
+                    "https://images.pexels.com/photos/2774140/pexels-photo-2774140.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  }
+                  fill={true}
+                  objectFit="cover"
+                ></Image>
+              </div>
+
+              <h3 className="max-w-[40%] text-end">
+                We will help you to find the perfect fit both for you and the
+                pet
+              </h3>
+            </div>
+            <div>
+              <div className="relative h-80 w-full">
+                <Image
+                  className="w-full rounded-3xl"
+                  alt="Cat"
+                  src={
+                    "https://images.pexels.com/photos/2558605/pexels-photo-2558605.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  }
+                  fill={true}
+                  objectFit="cover"
+                ></Image>
               </div>
             </div>
-            <aside className="relative flex flex-col gap-16 md:w-1/2">
-              <div className="relative flex flex-row justify-between gap-8">
-                <div className=" relative h-72 w-[50rem]">
-                  <Image
-                    className="w-full rounded-3xl"
-                    alt="Dog"
-                    src={
-                      "https://images.pexels.com/photos/2774140/pexels-photo-2774140.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    }
-                    fill={true}
-                    objectFit="cover"
-                  ></Image>
-                </div>
-
-                <h3 className="text-end">We helped with 1k+ adoptions</h3>
-              </div>
-              <div>
-                <div className="relative h-80 w-full">
-                  <Image
-                    className="w-full rounded-3xl"
-                    alt="Cat"
-                    src={
-                      "https://images.pexels.com/photos/2558605/pexels-photo-2558605.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    }
-                    fill={true}
-                    objectFit="cover"
-                  ></Image>
-                </div>
-              </div>
-            </aside>
-          </div>
-          {/* <div className="h-64 w-48 "></div> */}
+          </aside>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
