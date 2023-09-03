@@ -9,6 +9,16 @@ import Image from "next/image";
 export default function Home() {
   return (
     <RootLayout>
+      <div className="absolute left-0 top-0 h-full w-full ">
+        <Image
+          className="-translate-x-1/4 translate-y-1/4 scale-125 opacity-30 sm:translate-y-48 sm:scale-100"
+          priority
+          src="/img/paw-print.svg"
+          fill
+          objectFit="contain"
+          alt="Background paw print"
+        />
+      </div>
       <FullscreenLanding />
       <MainContent>
         <Section>
