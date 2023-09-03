@@ -1,16 +1,21 @@
+import { cn } from "@/utils";
 import React from "react";
 
 interface LoaderProps {
   isLoading: boolean;
+  className?: string;
 }
 
-export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
+export const Loader: React.FC<LoaderProps> = ({ isLoading, className }) => {
   return (
     <>
       {isLoading && (
         <div
           style={{ margin: 0 }}
-          className="fixed left-0 top-0 z-[999] m-0 h-full w-full bg-black/20"
+          className={cn(
+            "fixed left-0 top-0 z-[999] m-0 h-full w-full bg-black/20",
+            className
+          )}
         >
           <div
             role="status"
@@ -18,7 +23,7 @@ export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
           >
             <svg
               aria-hidden="true"
-              className=" h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+              className=" h-8 w-8 animate-spin fill-primary text-gray-200 dark:text-gray-600"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

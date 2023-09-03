@@ -24,7 +24,7 @@ interface FullscreenLandingProps {}
 const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
   return (
     <div>
-      <div className="absolute left-0 top-0 -z-10  h-screen w-full  "></div>
+      {/* <div className="absolute left-0 top-0 -z-10  h-screen w-full  "></div> */}
       <div className="relative">
         <div className="m-auto flex max-w-screen-2xl flex-col justify-between gap-8 px-4 py-32 sm:px-8 ">
           <div className="flex flex-1 flex-col md:flex-row ">
@@ -70,7 +70,7 @@ const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
               </div>
             </aside>
           </div>
-          <div className="h-64 w-48 "></div>
+          {/* <div className="h-64 w-48 "></div> */}
         </div>
       </div>
     </div>

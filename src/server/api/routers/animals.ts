@@ -21,11 +21,7 @@ export const animalsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(2).max(50),
-        type: z.union([
-          z.literal("Cat"),
-          z.literal("Dog"),
-          z.literal("Monkey"),
-        ]),
+        type: z.string(),
         location: z.string(),
         sex: z.string(),
         age: z.string(),

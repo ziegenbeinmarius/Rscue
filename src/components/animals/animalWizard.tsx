@@ -48,7 +48,7 @@ export const AnimalWizard: React.FC<AnimalWizardProps> = () => {
 
 const animalFormSchema = z.object({
   name: z.string().min(2).max(50),
-  type: z.union([z.literal("Cat"), z.literal("Dog"), z.literal("Monkey")]),
+  type: z.string(),
   location: z.string(),
   sex: z.string(),
   age: z.string(),
@@ -139,16 +139,19 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
       <DialogTrigger asChild>
         <Button>Add Animal</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl ">
         <Loader isLoading={isLoading} />
         <DialogHeader>
           <DialogTitle>Add animal</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-8">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className=" space-y-8 p-1"
+          >
             <ScrollArea className="h-[60vh] pr-4">
-              <section className="grid grid-cols-2 gap-4">
+              <section className="grid grid-cols-2 gap-4 p-1 ">
                 <FormField
                   control={form.control}
                   name="name"
@@ -355,29 +358,28 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                     </FormItem>
                   )}
                 />
-              </section>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Lupo is quite a happy dog. We adopted him as a rescue in greece..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <section className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Lupo is quite a happy dog. We adopted him as a rescue in greece..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 {fields.map((field, index) => {
                   return (
                     <div
-                      className="flex flex-row items-end gap-4"
+                      className="col-span-2 flex flex-row items-end gap-4"
                       key={field.id}
                     >
                       <FormField
