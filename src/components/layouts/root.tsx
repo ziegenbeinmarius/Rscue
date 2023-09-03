@@ -27,7 +27,7 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={cn(raleway.className)}>
-        <nav className="sticky top-0 z-[99] h-12 bg-slate-700 p-4 sm:h-24  sm:px-8  sm:py-4 ">
+        <nav className="sticky top-0 z-[99] h-12 bg-secondary p-4 sm:h-24  sm:px-8  sm:py-4 ">
           <div className="m-auto flex max-w-screen-2xl flex-row items-center justify-between ">
             <h2>Rscue</h2>
             <NavigationMenu>

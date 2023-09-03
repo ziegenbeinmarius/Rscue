@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageIcon, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Carousel } from "flowbite-react";
@@ -22,7 +22,29 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   const { data: animals, isLoading } = api.animals.getAll.useQuery();
 
   if (isLoading) {
-    return <Loader isLoading={isLoading} />;
+    return (
+      <div className="relative w-full">
+        <h2>Our animals</h2>
+        <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <Loader className="absolute" isLoading={true} />
+          {[1, 2, 3].map((fake) => (
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  <p>...</p>
+                </CardTitle>
+                <CardDescription>...</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="relative h-48 w-full">
+                  <ImageIcon className="h-full w-full opacity-20" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
   }
   if (!animals) {
     return (
@@ -142,7 +164,18 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
           <DialogTitle>{animal.name}</DialogTitle>
         </DialogHeader>
 
-        <Carousel>
+        <Carousel
+          leftControl={
+            <div className="rounded-full bg-primary p-2">
+              <ChevronLeft className="text-white" />
+            </div>
+          }
+          rightControl={
+            <div className="rounded-full bg-primary p-2">
+              <ChevronRight className="text-white" />
+            </div>
+          }
+        >
           {animal.imageUrls &&
             animal.imageUrls.length > 0 &&
             animal.imageUrls.map((imageUrl, index) => (
