@@ -12,29 +12,17 @@ import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Carousel } from "flowbite-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Loader } from "../ui/loader";
 
 interface AnimalCardsProps {}
 
 type AnimalOutput = RouterOutputs["animals"]["findOne"];
 export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   const { data: animals, isLoading } = api.animals.getAll.useQuery();
-  const ctx = api.useContext();
 
   if (isLoading) {
-    return (
-      <div>
-        <h2>Loading animals</h2>
-      </div>
-    );
+    return <Loader isLoading={isLoading} />;
   }
   if (!animals) {
     return (
@@ -93,7 +81,9 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
                 <Button
                   variant={"destructive"}
                   size={"icon_small"}
-                  onClick={() => deleteAnimal(animal.id)}
+                  onClick={(e) => {
+                    e.preventDefault(), deleteAnimal(animal.id);
+                  }}
                 >
                   <X size={20} />
                 </Button>
@@ -106,23 +96,20 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Carousel draggable={false} leftControl={<></>} rightControl={<></>}>
-            {animal.imageUrls &&
-              animal.imageUrls.length > 0 &&
-              animal.imageUrls.map((imageUrl, index) => (
-                <div
-                  className="relative h-48 w-full"
-                  key={`img_${animal.name}_${animal.id}_${index}`}
-                >
-                  <Image
-                    alt={`Image of ${animal.name}_${index}`}
-                    src={imageUrl.url}
-                    layout="fill"
-                    objectFit="contain"
-                  ></Image>
-                </div>
-              ))}
-          </Carousel>
+          {animal.imageUrls && animal.imageUrls.length > 0 && (
+            <div
+              className="relative h-48 w-full"
+              key={`img_${animal.name}_${animal.id}`}
+            >
+              <Image
+                className="object-contain"
+                fill
+                sizes="(max-width: 200px)"
+                alt={`Image of ${animal.name}`}
+                src={animal.imageUrls[0]!.url}
+              ></Image>
+            </div>
+          )}
         </CardContent>
       </Card>
       <AnimalDialog
@@ -147,6 +134,7 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
   if (!animal) {
     return <></>;
   }
+  // TODO make card clickable but dont open dialog on remove animal
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogContent className="max-w-2xl">
@@ -163,10 +151,11 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
                 key={`img_${animal.name}_${animal.id}_${index}`}
               >
                 <Image
+                  className="object-contain"
+                  fill
+                  sizes="(max-width: 672px )"
                   alt={`Image of ${animal.name}_${index}`}
                   src={imageUrl.url}
-                  layout="fill"
-                  objectFit="contain"
                 ></Image>
               </div>
             ))}
