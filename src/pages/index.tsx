@@ -9,9 +9,9 @@ import Image from "next/image";
 export default function Home() {
   return (
     <RootLayout>
-      <div className="absolute left-0 top-0 h-full w-full ">
+      <div className="absolute left-0 top-0 h-screen w-screen ">
         <Image
-          className="-translate-x-1/4 translate-y-1/4 scale-125 opacity-30 sm:translate-y-48 sm:scale-100"
+          className="-translate-x-1/4 translate-y-1/4 scale-125 opacity-30 sm:translate-y-48 sm:scale-100 xl:-translate-x-1/3"
           priority
           src="/img/paw-print.svg"
           fill
@@ -21,7 +21,7 @@ export default function Home() {
       </div>
       <FullscreenLanding />
       <MainContent>
-        <Section>
+        <Section id="animals">
           <AnimalCards />
         </Section>
         <AnimalWizard />
@@ -36,19 +36,23 @@ const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
     <section className="relative px-4">
       {/* <div className="absolute left-0 top-0 -z-10  h-screen w-full  "></div> */}
       <div className="m-auto flex max-w-screen-2xl flex-col justify-between gap-8  py-32  ">
-        <div className="flex flex-1 flex-col md:flex-row ">
-          <div className="flex flex-1 flex-col space-y-16">
-            <h1>
+        <div className="flex flex-1 flex-col gap-8 lg:flex-row">
+          <div className="flex flex-1 flex-col items-center space-y-16 md:items-start">
+            <h1 className="text-center md:text-start">
               Find your new <br className="hidden sm:block" />
               pet partner
             </h1>
             <div>
-              <Button className="font-bold" size={"cta"}>
+              <Button
+                className="font-bold"
+                size={"cta"}
+                onClick={() => (document.location = "#animals")}
+              >
                 Look at our animals
               </Button>
             </div>
           </div>
-          <aside className="relative flex flex-col gap-16 md:w-1/2">
+          <aside className="relative flex flex-col gap-16 lg:w-1/2">
             <div className="relative flex flex-row justify-between gap-8">
               <div className=" relative h-72 w-[50rem]">
                 <Image
@@ -67,7 +71,7 @@ const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
                 pet
               </h3>
             </div>
-            <div>
+            <div className="hidden lg:block">
               <div className="relative h-80 w-full">
                 <Image
                   className="w-full rounded-3xl"
