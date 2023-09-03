@@ -26,6 +26,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Textarea } from "../ui/textarea";
 import { ScrollArea } from "../ui/scroll-area";
+import { Loader } from "../ui/loader";
 
 interface AnimalWizardProps {}
 
@@ -75,7 +76,18 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
   const form = useForm<z.infer<typeof animalFormSchema>>({
     resolver: zodResolver(animalFormSchema),
     defaultValues: {
+      name: "",
+      type: undefined,
+      location: undefined,
+      sex: undefined,
+      age: "",
+      size: undefined,
+      characteristics: "",
+      health: "",
+      color: "",
+      race: "",
       imageUrls: [{ url: "" }],
+      description: "",
     },
   });
 
@@ -98,6 +110,20 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
       {
         onSuccess: () => {
           ctx.animals.invalidate();
+          form.reset({
+            name: "",
+            type: undefined,
+            location: undefined,
+            sex: undefined,
+            age: "",
+            size: undefined,
+            characteristics: "",
+            health: "",
+            color: "",
+            race: "",
+            imageUrls: [{ url: "" }],
+            description: "",
+          });
           handleDialog();
         },
         onError: (err) => {
@@ -107,55 +133,28 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
     );
   }
 
+  // TODO add loader thing
   return (
     <Dialog open={dialogOpen} onOpenChange={handleDialog}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>Add Animal</Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
+        <Loader isLoading={isLoading} />
         <DialogHeader>
-          <DialogTitle>
-            Add animal {isLoading && <p>Adding animal...</p>}
-          </DialogTitle>
+          <DialogTitle>Add animal</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-8">
             <ScrollArea className="h-[60vh] pr-4">
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Animal type</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a animal type" />
-                        </SelectTrigger>
-                      </FormControl>
-
-                      <SelectContent>
-                        <SelectItem value="Cat">Cat</SelectItem>
-                        <SelectItem value="Dog">Dog</SelectItem>
-                        <SelectItem value="Monkey">Monkey</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <section className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal name</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Lupo" {...field} />
                       </FormControl>
@@ -167,68 +166,141 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
 
                 <FormField
                   control={form.control}
-                  name="location"
+                  name="type"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal location</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Stockholm" {...field} />
-                      </FormControl>
+                      <FormLabel>Type of animal</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What species is your animal?" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          <SelectItem value="Cat">Cat</SelectItem>
+                          <SelectItem value="Dog">Dog</SelectItem>
+                          <SelectItem value="Monkey">Monkey</SelectItem>
+                        </SelectContent>
+                      </Select>
 
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Where is the animal currently?" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          <SelectItem value="Stockholm">Stockholm</SelectItem>
+                          <SelectItem value="Gothenburg">Gothenburg</SelectItem>
+                          <SelectItem value="Malmö">Malmö</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="sex"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal sex</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Male" {...field} />
-                      </FormControl>
+                      <FormLabel>Sex</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What sex is you animal?" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                        </SelectContent>
+                      </Select>
 
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="age"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal age</FormLabel>
+                      <FormLabel>Age</FormLabel>
                       <FormControl>
-                        <Input placeholder="3" {...field} />
+                        <Input type="number" placeholder="3" {...field} />
                       </FormControl>
 
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="size"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal size</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Large" {...field} />
-                      </FormControl>
+                      <FormLabel>Size</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What is the size of your animal?" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          <SelectItem value="Small">Small</SelectItem>
+                          <SelectItem value="Medium">Female</SelectItem>
+                          <SelectItem value="Large">Large</SelectItem>
+                        </SelectContent>
+                      </Select>
 
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="characteristics"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal characteristics</FormLabel>
+                      <FormLabel>Characteristics</FormLabel>
                       <FormControl>
-                        <Input placeholder="Playful" {...field} />
+                        <Input
+                          placeholder="Playful, fearful, curious, happy..."
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -240,9 +312,12 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                   name="health"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal health</FormLabel>
+                      <FormLabel>Health</FormLabel>
                       <FormControl>
-                        <Input placeholder="Healthy" {...field} />
+                        <Input
+                          placeholder="Healthy, but needs new shots"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -254,9 +329,12 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                   name="color"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal color</FormLabel>
+                      <FormLabel>Color</FormLabel>
                       <FormControl>
-                        <Input placeholder="Orange" {...field} />
+                        <Input
+                          placeholder="Orange, black and white, brownish..."
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -268,7 +346,7 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                   name="race"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Animal race</FormLabel>
+                      <FormLabel>Breed</FormLabel>
                       <FormControl>
                         <Input placeholder="Husky" {...field} />
                       </FormControl>
@@ -284,9 +362,12 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Animal description</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Lupo is a quite dog" {...field} />
+                      <Textarea
+                        placeholder="Lupo is quite a happy dog. We adopted him as a rescue in greece..."
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -304,9 +385,12 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                         name={`imageUrls.${index}.url` as const}
                         render={({ field }) => (
                           <FormItem className="flex-1">
-                            <FormLabel>Animal url</FormLabel>
+                            <FormLabel>Image url</FormLabel>
                             <FormControl>
-                              <Input placeholder="www.cute.se" {...field} />
+                              <Input
+                                placeholder="www.cuteimage.se"
+                                {...field}
+                              />
                             </FormControl>
 
                             <FormMessage />
@@ -318,11 +402,6 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                           type="button"
                           onClick={() => {
                             remove(index);
-                            // setIndexes((prev) =>
-                            //   prev.filter(
-                            //     (savedIndex) => savedIndex !== existingIndex
-                            //   )
-                            // );
                           }}
                         >
                           remove img
@@ -336,8 +415,6 @@ const AddAnimalDialog: React.FC<AddAnimalDialogProps> = () => {
                   type="button"
                   onClick={() => {
                     append({ url: "" });
-                    // setIndexes((prev) => [...prev, counter]);
-                    // setCounter((prev) => prev + 1);
                   }}
                 >
                   Add img
