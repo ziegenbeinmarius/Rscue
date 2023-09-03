@@ -21,18 +21,18 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        background: "hsl(var(--background))", //#F2EAD3
+        foreground: "hsl(var(--foreground))", //#3F2305
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsl(var(--primary))", //#3F2305
+          foreground: "hsl(var(--primary-foreground))", //#F2EAD3
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "hsl(var(--secondary))", //#DFD7BF
+          foreground: "hsl(var(--secondary-foreground))", //#906D2B
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
+          DEFAULT: "hsl(var(--destructive))", //#952323
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
@@ -70,6 +70,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        paw: "url('/img/paw-print.svg')",
       },
     },
   },

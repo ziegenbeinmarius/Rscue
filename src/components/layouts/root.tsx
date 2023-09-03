@@ -50,12 +50,12 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       <main className={cn(raleway.className)}>
         <nav
           className={cn(
-            "sticky top-0 z-[99] p-4 transition-all duration-300",
-            atTop ? " " : "bg-secondary "
+            "sticky top-0 z-[99]  p-4 shadow transition-all duration-300",
+            atTop ? " " : "rounded-b-md bg-secondary "
           )}
         >
           <div className="m-auto flex max-w-screen-2xl flex-row items-center justify-between ">
-            <h2>Rscue</h2>
+            <h2 className="font-bold">Rscue</h2>
             <NavigationMenu className="z-[1000]">
               <NavigationMenuList className="gap-8">
                 <NavigationMenuItem className="underline-offset-2 hover:underline">
