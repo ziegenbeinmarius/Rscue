@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "../ui/navigation-menu";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
-
 import { Raleway } from "next/font/google";
 import { cn } from "@/utils";
 import Link from "next/link";

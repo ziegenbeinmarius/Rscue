@@ -27,8 +27,8 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
         <h2>Our animals</h2>
         <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Loader className="absolute" isLoading={true} />
-          {[1, 2, 3].map((fake) => (
-            <Card>
+          {[1, 2, 3].map((index) => (
+            <Card key={index}>
               <CardHeader>
                 <CardTitle>
                   <p>...</p>
