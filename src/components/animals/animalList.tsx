@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight, ImageIcon, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { Carousel } from "flowbite-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Loader } from "../ui/loader";
 import { ScrollArea } from "../ui/scroll-area";
@@ -25,6 +24,13 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 import { useRouter } from "next/router";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
 
 interface AnimalCardsProps {}
 
@@ -274,34 +280,31 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
         </DialogHeader>
 
         <ScrollArea className="h-[70vh] pr-4">
-          <Carousel
-            leftControl={
-              <div className="rounded-full bg-primary p-2">
-                <ChevronLeft className="text-white" />
-              </div>
-            }
-            rightControl={
-              <div className="rounded-full bg-primary p-2">
-                <ChevronRight className="text-white" />
-              </div>
-            }
-          >
-            {animal.imageUrls &&
-              animal.imageUrls.length > 0 &&
-              animal.imageUrls.map((imageUrl, index) => (
-                <div
-                  className="relative h-96 max-h-[30vh] w-full"
-                  key={`img_${animal.name}_${animal.id}_${index}`}
-                >
-                  <Image
-                    className="object-contain"
-                    fill
-                    sizes="(max-width: 672px )"
-                    alt={`Image of ${animal.name}_${index}`}
-                    src={imageUrl.url}
-                  ></Image>
-                </div>
-              ))}
+          <Carousel>
+            <CarouselContent>
+              {animal.imageUrls &&
+                animal.imageUrls.length > 0 &&
+                animal.imageUrls.map((imageUrl, index) => (
+                  <CarouselItem
+                    className="relative h-96 max-h-[30vh] w-full"
+                    key={`img_${animal.name}_${animal.id}_${index}`}
+                  >
+                    <Image
+                      className="object-contain"
+                      fill
+                      sizes="(max-width: 672px )"
+                      alt={`Image of ${animal.name}_${index}`}
+                      src={imageUrl.url}
+                    ></Image>
+                  </CarouselItem>
+                ))}
+            </CarouselContent>
+            {animal.imageUrls.length > 1 && (
+              <>
+                <CarouselPrevious />
+                <CarouselNext />
+              </>
+            )}
           </Carousel>
 
           <p>{animal.description}</p>
