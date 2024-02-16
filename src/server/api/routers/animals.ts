@@ -6,11 +6,37 @@ import {
 import { z } from "zod";
 
 export const animalsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.animal.findMany({
-      include: { imageUrls: true, favorites: true },
-    });
-  }),
+  getAll: publicProcedure
+    .input(
+      z
+        .object({
+          skip: z.number().optional(),
+          take: z.number().optional(),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const skip = input?.skip ?? 0;
+      const take = input?.take ?? 10;
+      const totalAnimals = await ctx.prisma.animal.count();
+      const totalPages = Math.ceil(totalAnimals / take);
+      const currentPage = Math.floor(skip / take) + 1;
+      const hasNextPage = currentPage < totalPages;
+
+      const animals = await ctx.prisma.animal.findMany({
+        skip: skip,
+        take: take,
+        include: { imageUrls: true, favorites: true },
+      });
+
+      return {
+        data: animals,
+        totalPages,
+        hasNextPage,
+        currentPage,
+        totalCount: totalAnimals,
+      };
+    }),
   findOne: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.animal.findFirst({
       include: { imageUrls: true, favorites: true },
@@ -60,6 +86,8 @@ export const animalsRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ animalId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.animal.delete({ where: { id: input.animalId } });
+      await ctx.prisma.animal.delete({
+        where: { id: input.animalId },
+      });
     }),
 });

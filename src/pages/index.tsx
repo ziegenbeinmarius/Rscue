@@ -1,10 +1,7 @@
 import { RootLayout } from "@/components/layouts/root";
-import { Section } from "@/components/layouts/section";
-import { AnimalCards } from "@/components/animals/animalCards";
-import { AnimalWizard } from "@/components/animals/animalWizard";
-import { MainContent } from "@/components/layouts/mainContent";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,12 +17,6 @@ export default function Home() {
         />
       </div>
       <FullscreenLanding />
-      <MainContent>
-        <Section id="animals">
-          <AnimalCards />
-        </Section>
-        <AnimalWizard />
-      </MainContent>
     </RootLayout>
   );
 }
@@ -43,12 +34,8 @@ const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
               pet partner
             </h1>
             <div>
-              <Button
-                className="font-bold"
-                size={"cta"}
-                onClick={() => (document.location = "#animals")}
-              >
-                Look at our animals
+              <Button className="font-bold" size={"cta"}>
+                <Link href="/animals"> Look at our animals</Link>
               </Button>
             </div>
           </div>

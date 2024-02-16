@@ -1,5 +1,5 @@
 import { RouterOutputs, api } from "@/utils/api";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,12 +15,46 @@ import { Carousel } from "flowbite-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Loader } from "../ui/loader";
 import { ScrollArea } from "../ui/scroll-area";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+import { useRouter } from "next/router";
 
 interface AnimalCardsProps {}
 
 type AnimalOutput = RouterOutputs["animals"]["findOne"];
-export const AnimalCards: React.FC<AnimalCardsProps> = () => {
-  const { data: animals, isLoading } = api.animals.getAll.useQuery();
+export const AnimalList: React.FC<AnimalCardsProps> = () => {
+  const router = useRouter();
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const skip = Number(router.query.skip) || 0;
+  // Could also be added into url and allow adjust
+  const take = Number(router.query.take) || 6;
+
+  const { data: response, isLoading } = api.animals.getAll.useQuery({
+    skip,
+    take,
+  });
+  const animals = response?.data || [];
+
+  const handlePage = (page: number) => {
+    const newSkip = (page - 1) * take;
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, skip: newSkip < 0 ? 0 : newSkip },
+      },
+      undefined,
+      { scroll: false }
+    );
+    listRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   if (isLoading) {
     return (
@@ -28,7 +62,7 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
         <h2>Our animals</h2>
         <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Loader className="absolute" isLoading={true} />
-          {[1, 2, 3].map((index) => (
+          {Array.from({ length: 3 }).map((_, index) => (
             <Card key={index}>
               <CardHeader>
                 <CardTitle>
@@ -47,7 +81,7 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
       </div>
     );
   }
-  if (!animals) {
+  if (!response?.data) {
     return (
       <div>
         <h2>No Animals</h2>
@@ -56,13 +90,87 @@ export const AnimalCards: React.FC<AnimalCardsProps> = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" ref={listRef}>
       <h2>Our animals</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {animals.map((animal) => {
           return <AnimalCard animal={animal} key={animal.id} />;
         })}
       </div>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={
+                response.currentPage !== 0
+                  ? () => handlePage(response.currentPage - 1)
+                  : undefined
+              }
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink
+              isActive={response.currentPage === 1}
+              onClick={() => handlePage(1)}
+            >
+              {1}
+            </PaginationLink>
+          </PaginationItem>
+          {response.currentPage > 3 && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+          {Array.from({ length: 3 }, (_, i) => {
+            const basePage = response.currentPage - 1;
+            const adjustForFirstPage = response.currentPage === 1 ? 1 : 0;
+            const adjustForLastPage =
+              response.currentPage === response.totalPages ? 1 : 0;
+
+            return basePage + i + adjustForFirstPage - adjustForLastPage;
+          })
+            .filter((value) => value !== 1 && value !== response.totalPages)
+            .map(
+              (page) =>
+                page > 0 &&
+                page <= response.totalPages && (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      isActive={page === response.currentPage}
+                      onClick={() => handlePage(page)}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+            )}
+
+          {response.currentPage < response.totalPages - 2 && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+          <PaginationItem>
+            <PaginationLink
+              isActive={response.currentPage === response.totalPages}
+              onClick={() => handlePage(response.totalPages)}
+            >
+              {response.totalPages}
+            </PaginationLink>
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={
+                response.hasNextPage
+                  ? () => handlePage(response.currentPage + 1)
+                  : undefined
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

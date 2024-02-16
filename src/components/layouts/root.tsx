@@ -55,9 +55,16 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           )}
         >
           <div className="m-auto flex max-w-screen-2xl flex-row items-center justify-between ">
-            <h2 className="font-bold">Rscue</h2>
+            <Link href={"/"} className="font-bold">
+              <h2>Rscue</h2>
+            </Link>
             <NavigationMenu className="z-[1000]">
               <NavigationMenuList className="gap-8">
+                <NavigationMenuItem className="underline-offset-2 hover:underline">
+                  <Link href="/animals" legacyBehavior passHref>
+                    <NavigationMenuLink>Animals</NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
                 <NavigationMenuItem className="underline-offset-2 hover:underline">
                   <Link href="/about" legacyBehavior passHref>
                     <NavigationMenuLink>About us</NavigationMenuLink>
