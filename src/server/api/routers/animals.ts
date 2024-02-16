@@ -37,8 +37,9 @@ export const animalsRouter = createTRPCRouter({
         totalCount: totalAnimals,
       };
     }),
-  findOne: publicProcedure.query(({ ctx }) => {
+  findOne: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.animal.findFirst({
+      where: { id: input },
       include: { imageUrls: true, favorites: true },
     });
   }),

@@ -15,168 +15,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Loader } from "../ui/loader";
 import { ScrollArea } from "../ui/scroll-area";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "../ui/pagination";
-import { useRouter } from "next/router";
-import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import Link from "next/link";
+import { useAnimalsContext } from "./animalContext";
 
 interface AnimalCardsProps {}
 
-type AnimalOutput = RouterOutputs["animals"]["findOne"];
+type AnimalOutput = RouterOutputs["animals"]["getAll"]["data"][0];
 export const AnimalList: React.FC<AnimalCardsProps> = () => {
-  const router = useRouter();
-  const listRef = useRef<HTMLDivElement>(null);
-
-  const skip = Number(router.query.skip) || 0;
-  // Could also be added into url and allow adjust
-  const take = Number(router.query.take) || 6;
-
-  const { data: response, isLoading } = api.animals.getAll.useQuery({
-    skip,
-    take,
-  });
-  const animals = response?.data || [];
-
-  const handlePage = (page: number) => {
-    const newSkip = (page - 1) * take;
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, skip: newSkip < 0 ? 0 : newSkip },
-      },
-      undefined,
-      { scroll: false }
-    );
-    listRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="relative w-full">
-        <h2>Our animals</h2>
-        <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Loader className="absolute" isLoading={true} />
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Card key={index}>
-              <CardHeader>
-                <CardTitle>
-                  <p>...</p>
-                </CardTitle>
-                <CardDescription>...</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="relative h-48 w-full">
-                  <ImageIcon className="h-full w-full opacity-20" />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  if (!response?.data) {
-    return (
-      <div>
-        <h2>No Animals</h2>
-      </div>
-    );
-  }
+  const animals = useAnimalsContext();
 
   return (
-    <div className="space-y-4" ref={listRef}>
+    <div className="space-y-4">
       <h2>Our animals</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {animals.map((animal) => {
           return <AnimalCard animal={animal} key={animal.id} />;
         })}
       </div>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={
-                response.currentPage !== 0
-                  ? () => handlePage(response.currentPage - 1)
-                  : undefined
-              }
-            />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink
-              isActive={response.currentPage === 1}
-              onClick={() => handlePage(1)}
-            >
-              {1}
-            </PaginationLink>
-          </PaginationItem>
-          {response.currentPage > 3 && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-          {Array.from({ length: 3 }, (_, i) => {
-            const basePage = response.currentPage - 1;
-            const adjustForFirstPage = response.currentPage === 1 ? 1 : 0;
-            const adjustForLastPage =
-              response.currentPage === response.totalPages ? 1 : 0;
-
-            return basePage + i + adjustForFirstPage - adjustForLastPage;
-          })
-            .filter((value) => value !== 1 && value !== response.totalPages)
-            .map(
-              (page) =>
-                page > 0 &&
-                page <= response.totalPages && (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      isActive={page === response.currentPage}
-                      onClick={() => handlePage(page)}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-            )}
-
-          {response.currentPage < response.totalPages - 2 && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-          <PaginationItem>
-            <PaginationLink
-              isActive={response.currentPage === response.totalPages}
-              onClick={() => handlePage(response.totalPages)}
-            >
-              {response.totalPages}
-            </PaginationLink>
-          </PaginationItem>
-
-          <PaginationItem>
-            <PaginationNext
-              onClick={
-                response.hasNextPage
-                  ? () => handlePage(response.currentPage + 1)
-                  : undefined
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 };
@@ -232,7 +93,7 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
             {animal.location}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
           {animal.imageUrls && animal.imageUrls.length > 0 && (
             <div
               className="relative h-48 w-full"
@@ -247,6 +108,9 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
               ></Image>
             </div>
           )}
+          <Link href={`/animals/${animal.id}`}>
+            <Button className="w-full">Details</Button>
+          </Link>
         </CardContent>
       </Card>
       <AnimalDialog
@@ -316,6 +180,9 @@ const AnimalDialog: React.FC<AnimalDialogProps> = ({
           <p>Health: {animal.health}</p>
           <p>Race: {animal.race}</p>
           <p>Sex: {animal.sex}</p>
+          <Link href={`/animals/${animal.id}`}>
+            <Button>Details</Button>
+          </Link>
         </ScrollArea>
       </DialogContent>
     </Dialog>

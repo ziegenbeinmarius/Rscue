@@ -34,9 +34,11 @@ const FullscreenLanding: React.FC<FullscreenLandingProps> = () => {
               pet partner
             </h1>
             <div>
-              <Button className="font-bold" size={"cta"}>
-                <Link href="/animals"> Look at our animals</Link>
-              </Button>
+              <Link href="/animals">
+                <Button className="font-bold" size={"cta"}>
+                  Look at our animals
+                </Button>
+              </Link>
             </div>
           </div>
           <aside className="relative flex flex-col gap-16 lg:w-1/2">
