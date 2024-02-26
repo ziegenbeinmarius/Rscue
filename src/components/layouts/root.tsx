@@ -80,6 +80,10 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
                       <DropdownMenuContent className="z-[1000]">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <Link href="/admin">Admin</Link>
+                        </DropdownMenuItem>
+
                         <DropdownMenuItem>Profile</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
