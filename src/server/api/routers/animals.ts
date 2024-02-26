@@ -12,6 +12,13 @@ export const animalsRouter = createTRPCRouter({
         .object({
           skip: z.number().optional(),
           take: z.number().optional(),
+          filters: z
+            .object({
+              type: z.string().optional(),
+              location: z.union([z.string(), z.array(z.string())]).optional(),
+              sex: z.string().optional(),
+            })
+            .optional(),
         })
         .optional()
     )
@@ -26,6 +33,15 @@ export const animalsRouter = createTRPCRouter({
       const animals = await ctx.prisma.animal.findMany({
         skip: skip,
         take: take,
+        where: {
+          location: input?.filters?.location
+            ? {
+                in: Array.isArray(input?.filters?.location)
+                  ? input?.filters?.location
+                  : [input?.filters?.location],
+              }
+            : undefined,
+        },
         include: { imageUrls: true, favorites: true },
       });
 

@@ -15,16 +15,23 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import React from "react";
+import MultipleSelector, { Option } from "@/components/ui/multi-select";
 
 export default function AnimalsPage() {
+  const OPTIONS: Option[] = [
+    { label: "Stockholm", value: "Stockholm" },
+    { label: "Gothenburg", value: "Gothenburg" },
+  ];
   const router = useRouter();
   const skip = Number(router.query.skip) || 0;
   // Could also be added into url and allow adjust
   const take = Number(router.query.take) || 10;
+  const locations = router.query.location;
 
   const { data: response, isLoading } = api.animals.getAll.useQuery({
     skip,
     take,
+    filters: { location: locations },
   });
   const animals = response?.data || [];
   if (isLoading) {
@@ -33,10 +40,32 @@ export default function AnimalsPage() {
   if (!response?.data) {
     return <div>No Animals...</div>;
   }
+  const single: Option[] =
+    !Array.isArray(locations) && locations
+      ? [{ label: locations ?? "", value: locations ?? "" }]
+      : [];
+
+  const ayo: Option[] = Array.isArray(locations)
+    ? locations.map((l) => ({ label: l, value: l }))
+    : single;
+
   return (
     <RootLayout>
       <MainContent>
         <Section id="animals">
+          <MultipleSelector
+            value={ayo}
+            onChange={(option) =>
+              handleFilter({ location: option.map((o) => o.value) })
+            }
+            defaultOptions={OPTIONS}
+            placeholder="Select frameworks you like..."
+            emptyIndicator={
+              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                no results found.
+              </p>
+            }
+          />
           <AnimalsContext.Provider value={animals}>
             <AnimalList />
           </AnimalsContext.Provider>
@@ -57,6 +86,16 @@ export default function AnimalsPage() {
       {
         pathname: router.pathname,
         query: { ...router.query, skip: newSkip < 0 ? 0 : newSkip },
+      },
+      undefined,
+      { scroll: false }
+    );
+  }
+  function handleFilter(filters: { location: string[] }) {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, skip, location: [...filters.location] },
       },
       undefined,
       { scroll: false }

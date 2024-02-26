@@ -80,7 +80,8 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
                   variant={"destructive"}
                   size={"icon_small"}
                   onClick={(e) => {
-                    e.preventDefault(), deleteAnimal(animal.id);
+                    e.stopPropagation();
+                    deleteAnimal(animal.id);
                   }}
                 >
                   <X size={20} />
